@@ -912,7 +912,11 @@ int diag_process_apps_pkt(unsigned char *buf, int len, int pid)
 
 	pr_debug("diag: In %s, received cmd %02x %02x %02x\n",
 		 __func__, entry.cmd_code, entry.subsys_id, entry.cmd_code_hi);
-
+#ifdef WT_COMPILE_FACTORY_VERSION
+	if (entry.cmd_code == 0x4b && entry.subsys_id == 0x0b && (entry.cmd_code_hi == 0x36 || entry.cmd_code_hi == 0x34)) {
+		print_hex_dump(KERN_ERR, "wt_factory_cmd: ", DUMP_PREFIX_NONE, 16, 1, &buf[2], len > (3+5) ? 6 : (len-2), false);
+	}
+#endif
 	if (*buf == DIAG_CMD_LOG_ON_DMND && driver->log_on_demand_support &&
 	    driver->feature[PERIPHERAL_MODEM].rcvd_feature_mask) {
 		write_len = diag_cmd_log_on_demand(buf, len,

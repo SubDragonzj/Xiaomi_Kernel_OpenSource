@@ -3,6 +3,7 @@
  *
  * Copyright 2002 Hewlett-Packard Company
  * Copyright 2005-2008 Pierre Ossman
+ * Copyright (C) 2018 XiaoMi, Inc.
  *
  * Use consistent with the GNU GPL is permitted,
  * provided that this copyright notice is
@@ -4261,6 +4262,10 @@ static const struct mmc_fixup blk_fixups[] =
 	MMC_FIXUP("SEM32G", CID_MANFID_SANDISK, 0x100, add_quirk,
 		  MMC_QUIRK_INAND_CMD38),
 
+	MMC_FIXUP(CID_NAME_ANY, CID_MANFID_ANY, CID_OEMID_ANY,
+		  add_quirk_mmc, MMC_QUIRK_BROKEN_CLK_GATING),
+
+
 	/*
 	 * Some MMC cards experience performance degradation with CMD23
 	 * instead of CMD12-bounded multiblock transfers. For now we'll
@@ -4347,6 +4352,11 @@ static const struct mmc_fixup blk_fixups[] =
 	MMC_FIXUP("VZL00M", CID_MANFID_SAMSUNG, CID_OEMID_ANY, add_quirk_mmc,
 		  MMC_QUIRK_SEC_ERASE_TRIM_BROKEN),
 
+	MMC_FIXUP("Q3J96R", CID_MANFID_MICRON, CID_OEMID_ANY, add_quirk_mmc,
+		  MMC_QUIRK_BROKEN_CLK_GATING),
+
+	MMC_FIXUP("Q3J97V", CID_MANFID_MICRON, CID_OEMID_ANY, add_quirk_mmc,
+		  MMC_QUIRK_BROKEN_CLK_GATING),
 	END_FIXUP
 };
 
@@ -4362,6 +4372,10 @@ static int mmc_blk_probe(struct mmc_card *card)
 		return -ENODEV;
 
 	mmc_fixup_device(card, blk_fixups);
+
+	if (mmc_card_mmc(card)) {
+		pr_info("card->quirks = 0x%x\n", card->quirks);
+	}
 
 	md = mmc_blk_alloc(card);
 	if (IS_ERR(md))
