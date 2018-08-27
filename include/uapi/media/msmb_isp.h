@@ -300,12 +300,6 @@ enum msm_stream_memory_input_t {
 	MEMORY_INPUT_ENABLED
 };
 
-enum msm_stream_rdi_input_type {
-	MSM_CAMERA_RDI_MIN,
-	MSM_CAMERA_RDI_PDAF,
-	MSM_CAMERA_RDI_MAX,
-};
-
 struct msm_vfe_axi_stream_request_cmd {
 	uint32_t session_id;
 	uint32_t stream_id;
@@ -326,7 +320,7 @@ struct msm_vfe_axi_stream_request_cmd {
 	uint32_t controllable_output;
 	uint32_t burst_len;
 	/* Flag indicating memory input stream */
-	enum msm_stream_rdi_input_type rdi_input_type;
+	enum msm_stream_memory_input_t memory_input;
 };
 
 struct msm_vfe32_axi_stream_request_cmd {
@@ -768,7 +762,6 @@ struct msm_isp_fetch_eng_event {
 struct msm_isp_stats_event {
 	uint32_t stats_mask;                        /* 4 bytes */
 	uint8_t stats_buf_idxs[MSM_ISP_STATS_MAX];  /* 11 bytes */
-	uint8_t pd_stats_idx;
 };
 
 struct msm_isp_stream_ack {
