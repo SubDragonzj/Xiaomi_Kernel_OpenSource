@@ -1676,3 +1676,4 @@ module_init(msm_sensor_driver_init);
 module_exit(msm_sensor_driver_exit);
 MODULE_DESCRIPTION("msm_sensor_driver");
 MODULE_LICENSE("GPL v2");
+
